@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOP dessert — torty na zamówienie · Białystok</title>
+<meta name="description" content="Torty na zamówienie w Białymstoku — lambeth, aksamitne 3D, kwiatowe, dla dzieci, mini torty i drip. Zaprojektuj swój tort online.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== TOKENS ===== */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#FBF3EE;
+  --cream-2:#F3E2DE;
+  --plate:#FFFFFF;
+  --ink:#2B1E22;
+  --ink-soft:#6B5760;
+  --ink-faint:#9C8A90;
+  --rose:#B14D68;
+  --rose-deep:#7E2F45;
+  --rose-soft:#F0CBD4;
+  --gold:#B08D5A;
+  --gold-soft:#DFC79A;
+  --lavender:#8D7793;
+  --line:rgba(43,30,34,.10);
+  --line-gold:rgba(176,141,90,.35);
+  --pad:clamp(28px,6vw,104px);
+  --radius:20px;
+  --sh-sm:0 1px 2px rgba(43,30,34,.05), 0 2px 8px rgba(43,30,34,.05);
+  --sh-md:0 6px 16px rgba(43,30,34,.06), 0 16px 32px rgba(43,30,34,.08);
+  --sh-lg:0 14px 30px rgba(43,30,34,.09), 0 40px 70px rgba(43,30,34,.12);
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;overflow-x:hidden;font-size:16px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button,select,input,textarea{font-family:inherit}
+h1,h2,h3,h4{font-family:'Playfair Display',serif;font-weight:700;letter-spacing:-.005em}
+em{font-style:italic;font-weight:600;font-family:'Playfair Display',serif;color:var(--rose)}
+
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--rose);display:flex;align-items:center;gap:11px;margin-bottom:20px;font-weight:600}
+.eyebrow::before{content:'';display:block;width:22px;height:1px;background:var(--gold)}
+.eyebrow.on-dark{color:var(--gold-soft)}
+.eyebrow.on-dark::before{background:var(--gold-soft)}
+
+/* real photo container — replaces old illustrated placeholders everywhere */
+.photo{position:relative;overflow:hidden;background:var(--cream-2)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease}
+
+/* ===== NAV ===== */
+header{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(251,243,238,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav-inner{max-width:1480px;margin:0 auto;padding:16px var(--pad);display:flex;align-items:center;justify-content:space-between;gap:20px}
+.logo{font-family:'Playfair Display',serif;font-size:25px;letter-spacing:.01em;flex-shrink:0;display:flex;align-items:center;gap:8px;color:var(--ink)}
+.logo em{color:var(--rose)}
+.logo-icon{height:34px;width:auto;filter:sepia(1) saturate(2) hue-rotate(300deg) brightness(.65) contrast(1.05);opacity:.88}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--ink-soft);transition:color .3s}
+.nav-links a:hover{color:var(--rose)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.lang-switch{display:flex;gap:2px;background:rgba(43,30,34,.06);padding:3px;border-radius:100px}
+.lang-btn{border:none;background:transparent;padding:6px 12px;border-radius:100px;font-size:11px;font-weight:700;letter-spacing:.03em;cursor:pointer;color:var(--ink-soft);transition:all .25s}
+.lang-btn.active{background:var(--ink);color:var(--cream)}
+.nav-cta{background:var(--rose);color:#fff;padding:11px 22px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;transition:all .3s;white-space:nowrap;display:flex;align-items:center;gap:8px;box-shadow:var(--sh-sm)}
+.nav-cta:hover{background:var(--rose-deep);transform:translateY(-1px);box-shadow:var(--sh-md)}
+.nav-cta svg{width:13px;height:13px;flex-shrink:0}
+.burger{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--ink)}
+#burger-menu{display:none;position:fixed;inset:0;background:var(--cream);z-index:99;padding:100px 32px 32px;flex-direction:column;gap:22px}
+#burger-menu a{font-family:'Playfair Display',serif;font-size:28px;font-style:italic;color:var(--ink)}
+#burger-menu .lang-switch{align-self:flex-start;margin-top:6px}
+#burger-menu .nav-cta{align-self:flex-start;margin-top:10px}
+
+/* ===== HERO (full-bleed real photo) ===== */
+#hero{position:relative;min-height:82vh;display:flex;align-items:flex-end;overflow:hidden}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:center 25%;animation:kenburns 22s ease-in-out infinite alternate}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.07)}}
+.hero-bg::after{content:'';position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(30,18,22,.05) 0%, rgba(30,18,22,.25) 55%, rgba(30,18,22,.82) 100%),
+  linear-gradient(90deg, rgba(30,18,22,.62) 0%, rgba(30,18,22,.15) 60%, transparent 100%)}
+.hero-copy{position:relative;z-index:2;padding:150px var(--pad) 68px;max-width:620px}
+.hero-h{font-size:clamp(42px,5.2vw,74px);line-height:1.08;font-weight:700;margin-bottom:26px;color:#fff;letter-spacing:-.01em}
+.hero-h em{color:var(--gold-soft)}
+.hero-sub{font-size:16.5px;font-weight:400;line-height:1.8;color:rgba(255,255,255,.86);max-width:440px;margin-bottom:36px}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary{background:var(--rose);color:#fff;padding:16px 32px;border-radius:100px;font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;transition:all .3s;border:1px solid var(--rose);box-shadow:var(--sh-sm)}
+.btn-primary:hover{background:var(--rose-deep);border-color:var(--rose-deep);transform:translateY(-2px);box-shadow:var(--sh-md)}
+.btn-outline{padding:16px 32px;border-radius:100px;font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:1px solid rgba(255,255,255,.55);color:#fff;transition:all .3s}
+.btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.12)}
+
+/* ===== MARQUEE ===== */
+.marquee{overflow:hidden;background:var(--cream-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track{display:flex;align-items:center;gap:0;animation:mq 30s linear infinite;white-space:nowrap;width:max-content;padding:15px 0}
+.marquee-item{font-size:11.5px;line-height:1;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);padding:0 28px;font-weight:600;display:inline-flex;align-items:center}
+.marquee-dot{color:var(--gold);font-size:10px;line-height:1}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ===== ABOUT ===== */
+#about{padding:96px var(--pad);max-width:1480px;margin:0 auto;display:grid;grid-template-columns:.9fr 1.1fr;gap:76px;align-items:center}
+.about-imgs{position:relative;height:500px}
+.about-imgs .photo:first-child{position:absolute;top:0;left:0;width:72%;height:78%;border-radius:var(--radius);box-shadow:var(--sh-md)}
+.about-imgs .photo:last-child{position:absolute;bottom:0;right:0;width:56%;height:56%;border-radius:var(--radius);border:7px solid var(--cream);box-shadow:var(--sh-lg)}
+.about-h{font-size:clamp(34px,3.6vw,54px);line-height:1.08;margin-bottom:26px}
+.about-p{font-size:17px;font-weight:400;line-height:1.85;color:var(--ink-soft);margin-bottom:18px;max-width:520px}
+.about-facts{display:flex;gap:0;margin-top:36px;flex-wrap:wrap}
+.fact{padding:16px 30px 16px 0;border-right:1px solid var(--line);margin-right:30px}
+.fact:last-child{border-right:none}
+.fact-t{font-family:'Playfair Display',serif;font-style:italic;font-size:19px;color:var(--rose);margin-bottom:5px;font-weight:600}
+.fact-l{font-size:12px;color:var(--ink-faint)}
+
+/* ===== MENU ===== */
+#menu{padding:20px var(--pad) 96px;max-width:1480px;margin:0 auto}
+.menu-top{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:46px;flex-wrap:wrap;gap:20px}
+.menu-h{font-size:clamp(34px,3.8vw,56px);line-height:1.06}
+.menu-note{font-size:15px;font-weight:400;color:var(--ink-soft);max-width:290px}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.mc{background:var(--plate);border-radius:var(--radius);overflow:hidden;transition:transform .45s cubic-bezier(.2,.8,.2,1),box-shadow .45s;position:relative;box-shadow:var(--sh-sm)}
+.mc:hover{transform:translateY(-7px);box-shadow:var(--sh-lg)}
+.mc .photo{height:230px}
+.mc:hover .photo img{transform:scale(1.06)}
+.mc-body{padding:24px 24px 28px}
+.mc-name{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:9px}
+.mc-desc{font-size:14.5px;font-weight:400;line-height:1.65;color:var(--ink-soft)}
+.mc-tag{position:absolute;top:16px;left:16px;background:var(--rose);color:#fff;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:6px 13px;border-radius:100px;font-weight:600;z-index:2;box-shadow:var(--sh-sm)}
+
+/* ===== CONFIGURATOR (real-photo style picker) ===== */
+#builder{background:var(--cream-2);padding:96px var(--pad)}
+.builder-inner{max-width:1220px;margin:0 auto}
+.builder-top{text-align:center;margin-bottom:58px}
+.builder-top .eyebrow{justify-content:center}
+.builder-h{font-size:clamp(34px,3.8vw,54px)}
+.builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
+.b-step{margin-bottom:32px}
+.b-label{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:15px;font-weight:600}
+.stepper{display:flex;align-items:center;gap:18px}
+.stepper button{width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(43,30,34,.18);background:var(--plate);color:var(--ink);font-size:20px;cursor:pointer;transition:all .25s;box-shadow:var(--sh-sm)}
+.stepper button:hover{background:var(--ink);border-color:var(--ink);color:var(--cream)}
+.stepper-val{font-family:'Playfair Display',serif;font-size:32px;min-width:70px;text-align:center;color:var(--ink)}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.swatch{padding:10px 19px;border-radius:100px;border:1.5px solid rgba(43,30,34,.16);font-size:13px;font-weight:500;cursor:pointer;transition:all .25s;background:var(--plate);color:var(--ink-soft)}
+.swatch.active,.swatch:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.style-opt{border-radius:14px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;border:2px solid transparent;box-shadow:var(--sh-sm)}
+.style-opt .photo{height:78px}
+.style-opt.active{border-color:var(--rose);box-shadow:var(--sh-md)}
+.style-opt-label{position:absolute;left:0;right:0;bottom:0;padding:8px 8px 7px;font-size:11px;font-weight:600;color:#fff;text-align:center;background:linear-gradient(0deg,rgba(30,18,22,.75),transparent)}
+.cake-preview{background:var(--plate);border:1px solid var(--line);box-shadow:var(--sh-lg);border-radius:28px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:22px;position:sticky;top:100px}
+.preview-photo{width:100%;height:320px;border-radius:18px;overflow:hidden}
+.preview-photo img{width:100%;height:100%;object-fit:cover;transition:opacity .35s ease}
+.cake-summary{width:100%;padding:0 12px}
+.cake-summary-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);font-size:14.5px;font-weight:400;color:var(--ink-soft)}
+.cake-summary-row span:last-child{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;color:var(--rose);font-size:16px;text-align:right}
+.builder-cta{width:calc(100% - 24px);margin:0 12px;background:var(--rose);color:#fff;border:none;padding:17px;border-radius:100px;font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:all .3s;box-shadow:var(--sh-sm)}
+.builder-cta:hover{background:var(--rose-deep);box-shadow:var(--sh-md)}
+.builder-cta:active,.swatch:active,.style-opt:active,.stepper button:active{transform:scale(.97)}
+.builder-note{font-size:12.5px;font-weight:400;color:var(--ink-faint);text-align:center;line-height:1.6;padding:0 12px}
+
+/* ===== GALLERY ===== */
+#gallery{padding:96px 0 104px}
+.gal-head{padding:0 var(--pad);display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:28px;max-width:1480px;margin-left:auto;margin-right:auto;flex-wrap:wrap;gap:16px}
+.gal-h{font-size:clamp(34px,3.8vw,56px)}
+.gal-link{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;border-bottom:2px solid var(--rose);padding-bottom:4px;color:var(--rose)}
+.gal-filters{padding:0 var(--pad);max-width:1480px;margin:0 auto 32px;display:flex;gap:10px;flex-wrap:wrap}
+.gal-filter{padding:9px 20px;border-radius:100px;border:1.5px solid var(--line);font-size:12.5px;font-weight:600;cursor:pointer;background:transparent;color:var(--ink-soft);transition:all .25s}
+.gal-filter.active,.gal-filter:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.gal-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;padding:0 5px}
+.gi{overflow:hidden;position:relative;aspect-ratio:1/1;transition:opacity .3s,transform .3s}
+.gi.hide{display:none}
+.gi .photo{width:100%;height:100%}
+.gi:hover .photo img{transform:scale(1.06)}
+.gi.big{grid-column:span 2;grid-row:span 2}
+.gi-cap{position:absolute;left:0;right:0;bottom:0;padding:10px 12px;font-size:11.5px;color:#fff;background:linear-gradient(0deg,rgba(30,18,22,.72),transparent);opacity:0;transition:opacity .3s}
+.gi:hover .gi-cap{opacity:1}
+
+/* ===== STEPS ===== */
+#steps{padding:92px var(--pad);background:var(--ink);color:var(--cream)}
+.steps-inner{max-width:1220px;margin:0 auto}
+.steps-h{text-align:center;font-size:clamp(34px,3.8vw,54px);margin-bottom:60px}
+.steps-h em{color:var(--gold-soft)}
+.steps-eyebrow{justify-content:center;color:var(--gold-soft)}
+.steps-eyebrow::before{background:var(--gold-soft)}
+.steps-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.step{padding:0 26px;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:22px;right:-4px;width:calc(100% - 46px);height:1px;background:rgba(251,243,238,.15)}
+.step-n{font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:var(--gold-soft);margin-bottom:19px;font-weight:600}
+.step-t{font-family:'Playfair Display',serif;font-size:21px;margin-bottom:11px}
+.step-s{font-size:14.5px;font-weight:400;line-height:1.65;color:rgba(251,243,238,.68)}
+
+/* ===== REACH ===== */
+#reach{padding:96px var(--pad);max-width:1480px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:68px}
+.reach-h{font-size:clamp(32px,3.4vw,48px);margin-bottom:24px}
+.reach-p{font-size:16px;font-weight:400;line-height:1.8;color:var(--ink-soft);margin-bottom:30px;max-width:460px}
+.hour-row{display:flex;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--ink-soft)}
+.reach-card{background:var(--plate);border-radius:var(--radius);padding:38px;border:1px solid var(--line);box-shadow:var(--sh-md)}
+.reach-card h3{font-size:25px;margin-bottom:11px}
+.reach-card p{font-size:14.5px;font-weight:400;color:var(--ink-soft);margin-bottom:24px}
+.form-row{display:flex;gap:16px;margin-bottom:17px}
+.form-group{flex:1;display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
+.form-group input,.form-group select,.form-group textarea{border:none;border-bottom:1px solid var(--line);padding:11px 0;font-size:15px;background:transparent;outline:none;transition:border-color .3s;color:var(--ink)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--rose)}
+.form-group input::placeholder,.form-group textarea::placeholder{color:var(--ink-faint)}
+.form-submit{margin-top:22px;background:var(--ink);color:var(--cream);border:none;padding:16px 30px;border-radius:100px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .3s}
+.form-submit:hover{background:var(--rose)}
+
+/* ===== FOOTER ===== */
+footer{background:var(--ink);color:var(--cream);padding:46px var(--pad);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.f-logo{font-family:'Playfair Display',serif;font-size:25px;font-style:italic;display:flex;align-items:center;gap:9px}
+.f-logo em{color:var(--gold-soft)}
+.f-logo-icon{height:32px;width:auto;filter:brightness(0) invert(1) opacity(.8)}
+.f-nav{display:flex;gap:28px;flex-wrap:wrap}
+.f-nav a{font-size:13px;color:rgba(251,243,238,.6);transition:color .3s}
+.f-nav a:hover{color:var(--gold-soft)}
+.f-copy{font-size:13px;color:rgba(251,243,238,.35)}
+
+/* ===== STICKY IG ===== */
+.sticky-ig{position:fixed;bottom:28px;right:28px;z-index:90;background:var(--ink);color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:var(--sh-lg);transition:transform .3s,background .3s}
+.sticky-ig:hover{transform:translateY(-3px);background:var(--rose)}
+.sticky-ig::after{content:attr(data-tip);position:absolute;right:68px;top:50%;transform:translateY(-50%) translateX(6px);background:var(--ink);color:var(--cream);font-size:12px;font-weight:500;padding:8px 14px;border-radius:100px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .25s,transform .25s}
+.sticky-ig:hover::after{opacity:1;transform:translateY(-50%) translateX(0)}
+
+/* ===== TOAST ===== */
+#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--cream);padding:14px 26px;border-radius:100px;font-size:13.5px;font-weight:500;box-shadow:var(--sh-lg);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;display:flex;align-items:center;gap:10px}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== REVEAL ===== */
+.r{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}
+.r.visible{opacity:1;transform:translateY(0)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:960px){
+  .nav-links{display:none}
+  .nav-cta{display:none}
+  .burger{display:block}
+  #hero{min-height:640px}
+  .hero-copy{padding-top:120px}
+  #about{grid-template-columns:1fr}
+  .about-imgs{height:380px}
+  .menu-grid{grid-template-columns:repeat(2,1fr)}
+  .builder-grid{grid-template-columns:1fr}
+  .cake-preview{position:static}
+  .gal-grid{grid-template-columns:repeat(3,1fr)}
+  .steps-grid{grid-template-columns:1fr 1fr;row-gap:38px}
+  .step:not(:last-child)::after{display:none}
+  #reach{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .menu-grid{grid-template-columns:1fr}
+  .gal-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{flex-direction:column}
+  .style-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+  .marquee-track,.hero-bg img{animation:none}
+  .r{transition:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="#hero" class="logo">TOP<img src="data:image/png;base64,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" alt="" class="logo-icon"><em>dessert</em></a>
+    <nav class="nav-links">
+      <a href="#about" data-i18n="nav_about">O nas</a>
+      <a href="#menu" data-i18n="nav_menu">Menu</a>
+      <a href="#builder" data-i18n="nav_builder">Zaprojektuj tort</a>
+      <a href="#gallery" data-i18n="nav_gallery">Galeria</a>
+      <a href="#reach" data-i18n="nav_reach">Kontakt</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang-switch">
+        <button class="lang-btn active" data-setlang="pl" onclick="setLang('pl')">PL</button>
+        <button class="lang-btn" data-setlang="ru" onclick="setLang('ru')">RU</button>
+      </div>
+      <a href="https://www.instagram.com/top.dessert_bialystok/" target="_blank" class="nav-cta">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.25.06 2.1.26 2.85.55.77.3 1.42.7 2.07 1.35.65.65 1.05 1.3 1.35 2.07.29.75.49 1.6.55 2.85.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.06 1.25-.26 2.1-.55 2.85-.3.77-.7 1.42-1.35 2.07-.65.65-1.3 1.05-2.07 1.35-.75.29-1.6.49-2.85.55-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.25-.06-2.1-.26-2.85-.55-.77-.3-1.42-.7-2.07-1.35-.65-.65-1.05-1.3-1.35-2.07-.29-.75-.49-1.6-.55-2.85C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.06-1.25.26-2.1.55-2.85.3-.77.7-1.42 1.35-2.07C4.82 1.58 5.47 1.18 6.24.88c.75-.29 1.6-.49 2.85-.55C10.4 2.2 10.8 2.2 12 2.2zm0 1.8c-3.15 0-3.52 0-4.76.07-1.02.05-1.57.22-1.94.36-.49.19-.83.42-1.2.79-.37.37-.6.71-.79 1.2-.14.37-.31.92-.36 1.94-.06 1.24-.07 1.61-.07 4.76s0 3.52.07 4.76c.05 1.02.22 1.57.36 1.94.19.49.42.83.79 1.2.37.37.71.6 1.2.79.37.14.92.31 1.94.36 1.24.06 1.61.07 4.76.07s3.52 0 4.76-.07c1.02-.05 1.57-.22 1.94-.36.49-.19.83-.42 1.2-.79.37-.37.6-.71.79-1.2.14-.37.31-.92.36-1.94.06-1.24.07-1.61.07-4.76s0-3.52-.07-4.76c-.05-1.02-.22-1.57-.36-1.94-.19-.49-.42-.83-.79-1.2-.37-.37-.71-.6-1.2-.79-.37-.14-.92-.31-1.94-.36C15.52 4 15.15 4 12 4zm0 3.05A4.95 4.95 0 1 1 12 17a4.95 4.95 0 0 1 0-9.95zm0 1.8a3.15 3.15 0 1 0 0 6.3 3.15 3.15 0 0 0 0-6.3zm5.15-1.98a1.16 1.16 0 1 1-2.31 0 1.16 1.16 0 0 1 2.31 0z" fill="white"/></svg>
+        <span data-i18n="nav_cta">Napisz</span>
+      </a>
+      <button class="burger" onclick="toggleBurger()" aria-label="Menu">
+        <svg id="burger-icon" width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="burger-menu">
+  <a href="#about" onclick="closeBurger()" data-i18n="nav_about">O nas</a>
+  <a href="#menu" onclick="closeBurger()" data-i18n="nav_menu">Menu</a>
+  <a href="#builder" onclick="closeBurger()" data-i18n="nav_builder">Zaprojektuj tort</a>
+  <a href="#gallery" onclick="closeBurger()" data-i18n="nav_gallery">Galeria</a>
+  <a href="#reach" onclick="closeBurger()" data-i18n="nav_reach">Kontakt</a>
+  <div class="lang-switch">
+    <button class="lang-btn active" data-setlang="pl" onclick="setLang('pl')">PL</button>
+    <button class="lang-btn" data-setlang="ru" onclick="setLang('ru')">RU</button>
+  </div>
+  <a href="https://www.instagram.com/top.dessert_bialystok/" target="_blank" class="nav-cta" data-i18n="nav_cta_burger">Napisz na Instagramie</a>
+</div>
+
+<!-- HERO — real photo, full-bleed -->
+<section id="hero">
+  <div class="hero-bg"><img src="assets/hero.png" alt="Tort na zamówienie TOP dessert"></div>
+  <div class="hero-copy">
+    <div class="eyebrow on-dark" data-i18n="hero_eyebrow">Torty na zamówienie · Białystok</div>
+    <h1 class="hero-h" data-i18n="hero_h">Twój tort.<br>Twój kolor.<br><em>Twoja historia.</em></h1>
+    <p class="hero-sub" data-i18n="hero_sub">Każdy tort robię sama — od pierwszego kremu po ostatni detal. Wybierz styl, smak i dekorację, a razem stworzymy tort, którego nie zapomnisz.</p>
+    <div class="hero-btns">
+      <a href="#builder" class="btn-primary" data-i18n="hero_btn_primary">Zaprojektuj swój tort</a>
+      <a href="#gallery" class="btn-outline" data-i18n="hero_btn_outline">Zobacz portfolio</a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track" id="marquee-track"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-imgs">
+    <div class="photo r"><img src="assets/about-1.png" alt="Truskawki w czekoladzie TOP dessert"></div>
+    <div class="photo r" style="transition-delay:.1s"><img src="assets/about-2.png" alt="Tort ze świeżymi kwiatami TOP dessert"></div>
+  </div>
+  <div>
+    <div class="eyebrow r" data-i18n="about_eyebrow">O mnie</div>
+    <h2 class="about-h r" data-i18n="about_h">Cześć, tu <em>TOP dessert.</em></h2>
+    <p class="about-p r" data-i18n="about_p1">Tworzę torty na zamówienie w Białymstoku — od klasycznych tortów lambeth ze wstążkami, przez rzeźbione dekoracje 3D, po delikatne kompozycje z kwiatami. Każdy element robię ręcznie.</p>
+    <p class="about-p r" style="transition-delay:.1s" data-i18n="about_p2">Pracuję nad jednym zamówieniem na raz, więc Twój tort dostanie tyle czasu i uwagi, ile potrzebuje. Portfolio rośnie z każdym miesiącem — zobaczysz je w galerii poniżej.</p>
+    <div class="about-facts r" style="transition-delay:.2s">
+      <div class="fact"><div class="fact-t" data-i18n="about_fact1_t">Ręcznie</div><div class="fact-l" data-i18n="about_fact1_l">każdy detal robię sama</div></div>
+      <div class="fact"><div class="fact-t" data-i18n="about_fact2_t">Indywidualnie</div><div class="fact-l" data-i18n="about_fact2_l">jedno zamówienie na raz</div></div>
+      <div class="fact"><div class="fact-t" data-i18n="about_fact3_t">Białystok</div><div class="fact-l" data-i18n="about_fact3_l">odbiór i dostawa</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-top">
+    <div>
+      <div class="eyebrow r" data-i18n="menu_eyebrow">Co można zamówić</div>
+      <h2 class="menu-h r" data-i18n="menu_h">Słodka <em>mapa</em> TOP dessert.</h2>
+    </div>
+    <p class="menu-note r" data-i18n="menu_note">Każda kategoria to baza do indywidualnego zamówienia: zmieniamy rozmiar, smak i dekorację pod Twoją okazję.</p>
+  </div>
+  <div class="menu-grid">
+    <div class="mc r">
+      <div class="mc-tag" data-i18n="menu_tag_hit">Hit</div>
+      <div class="photo"><img src="assets/menu-lambeth.png" alt="Tort lambeth ze wstążkami"></div>
+      <div class="mc-body"><div class="mc-name" data-i18n="menu_card1_name">Lambeth i wstążki</div><div class="mc-desc" data-i18n="menu_card1_desc">Klasyczna, pikowana faktura kremu, satynowe wstążki i perły — wektorowa elegancja w pastelowych barwach.</div></div>
+    </div>
+    <div class="mc r" style="transition-delay:.05s">
+      <div class="photo"><img src="assets/menu-velvet.png" alt="Tort aksamitny 3D"></div>
+      <div class="mc-body"><div class="mc-name" data-i18n="menu_card2_name">Aksamitne 3D</div><div class="mc-desc" data-i18n="menu_card2_desc">Matowa, welurowa powłoka i rzeźbione elementy — serca, kule, bryły. Efekt, który trzeba zobaczyć na żywo.</div></div>
+    </div>
+    <div class="mc r" style="transition-delay:.1s">
+      <div class="photo"><img src="assets/menu-floral.png" alt="Tort z kwiatami"></div>
+      <div class="mc-body"><div class="mc-name" data-i18n="menu_card3_name">Kwiatowe i delikatne</div><div class="mc-desc" data-i18n="menu_card3_desc">Świeże kwiaty, bibułka i akwarelowe przejścia kolorów — dla ślubów, chrzcin i wyjątkowych okazji.</div></div>
+    </div>
+    <div class="mc r" style="transition-delay:.15s">
+      <div class="photo"><img src="assets/menu-kids.png" alt="Tort dla dziecka"></div>
+      <div class="mc-body"><div class="mc-name" data-i18n="menu_card4_name">Dla dzieci</div><div class="mc-desc" data-i18n="menu_card4_desc">Lepione ręcznie figurki z lukru plastycznego — ulubiona postać, zwierzątko albo bajka na torcie.</div></div>
+    </div>
+    <div class="mc r" style="transition-delay:.2s">
+      <div class="photo"><img src="assets/menu-mini.png" alt="Mini torty i boxy deserowe"></div>
+      <div class="mc-body"><div class="mc-name" data-i18n="menu_card5_name">Mini torty i boxy</div><div class="mc-desc" data-i18n="menu_card5_desc">Małe formy z lustrzaną polewą lub kremem — pojedynczo albo w zestawie prezentowym.</div></div>
+    </div>
+    <div class="mc r" style="transition-delay:.25s">
+      <div class="photo"><img src="assets/menu-drip.png" alt="Tort z dripem i owocami"></div>
+      <div class="mc-body"><div class="mc-name" data-i18n="menu_card6_name">Drip i owoce</div><div class="mc-desc" data-i18n="menu_card6_desc">Polewa spływająca po bokach, świeże jagody i owoce — klasyk, który zawsze robi wrażenie.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BUILDER -->
+<section id="builder">
+  <div class="builder-inner">
+    <div class="builder-top r">
+      <div class="eyebrow" data-i18n="builder_eyebrow">Zaprojektuj online</div>
+      <h2 class="builder-h" data-i18n="builder_h">Zaprojektuj <em>tort marzeń</em></h2>
+    </div>
+    <div class="builder-grid">
+      <div>
+        <div class="b-step r">
+          <div class="b-label" data-i18n="builder_label_servings">Ile porcji</div>
+          <div class="stepper">
+            <button onclick="changeServings(-2)" aria-label="Mniej">–</button>
+            <div class="stepper-val" id="servings-val">10</div>
+            <button onclick="changeServings(2)" aria-label="Więcej">+</button>
+          </div>
+        </div>
+        <div class="b-step r" style="transition-delay:.05s">
+          <div class="b-label" data-i18n="builder_label_flavor">Smak</div>
+          <div class="swatches" id="flavor-swatches"></div>
+        </div>
+        <div class="b-step r" style="transition-delay:.1s">
+          <div class="b-label" data-i18n="builder_label_style">Styl dekoracji</div>
+          <div class="style-grid" id="style-options"></div>
+        </div>
+      </div>
+      <div class="cake-preview">
+        <div class="preview-photo"><img id="preview-img" src="assets/menu-lambeth.png" alt=""></div>
+        <div class="cake-summary">
+          <div class="cake-summary-row"><span data-i18n="sum_label_servings">Porcji</span><span id="sum-servings">10</span></div>
+          <div class="cake-summary-row"><span data-i18n="sum_label_flavor">Smak</span><span id="sum-flavor"></span></div>
+          <div class="cake-summary-row"><span data-i18n="sum_label_style">Styl</span><span id="sum-style"></span></div>
+        </div>
+        <button class="builder-cta" onclick="sendBuilder()" data-i18n="builder_cta">Wyślij zapytanie na Instagram</button>
+        <p class="builder-note" data-i18n="builder_note">Dokładną cenę i termin ustalimy w wiadomości — zależą od rozmiaru, stylu i obłożenia kalendarza.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gal-head">
+    <div>
+      <div class="eyebrow r" data-i18n="gallery_eyebrow">Portfolio</div>
+      <h2 class="gal-h r" data-i18n="gallery_h">Ostatnie <em>realizacje.</em></h2>
+    </div>
+    <a href="https://www.instagram.com/top.dessert_bialystok/" target="_blank" class="gal-link r" data-i18n="gallery_link">Więcej na Instagramie →</a>
+  </div>
+  <div class="gal-filters r" id="gal-filters"></div>
+  <div class="gal-grid" id="gallery-grid"></div>
+</section>
+
+<!-- STEPS -->
+<section id="steps">
+  <div class="steps-inner">
+    <div class="eyebrow steps-eyebrow r" data-i18n="steps_eyebrow">Proces zamówienia</div>
+    <h2 class="steps-h r" data-i18n="steps_h">Jak <em>zamówić</em></h2>
+    <div class="steps-grid">
+      <div class="step r"><div class="step-n">01</div><div class="step-t" data-i18n="step1_t">Napisz</div><div class="step-s" data-i18n="step1_s">Na Instagramie — opisz okazję, termin i liczbę gości.</div></div>
+      <div class="step r" style="transition-delay:.05s"><div class="step-n">02</div><div class="step-t" data-i18n="step2_t">Zaprojektujemy tort</div><div class="step-s" data-i18n="step2_s">Dobierzemy smak, styl i dekorację — możesz zacząć w konfiguratorze powyżej.</div></div>
+      <div class="step r" style="transition-delay:.1s"><div class="step-n">03</div><div class="step-t" data-i18n="step3_t">Potwierdź zamówienie</div><div class="step-s" data-i18n="step3_s">Ustalimy cenę i termin, wpłacasz zadatek.</div></div>
+      <div class="step r" style="transition-delay:.15s"><div class="step-n">04</div><div class="step-t" data-i18n="step4_t">Odbierz lub otrzymaj</div><div class="step-s" data-i18n="step4_s">Odbiór osobisty w Białymstoku lub dostawa — do ustalenia przy zamówieniu.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- REACH -->
+<section id="reach">
+  <div>
+    <div class="eyebrow r" data-i18n="reach_eyebrow">Kontakt</div>
+    <h2 class="reach-h r" data-i18n="reach_h">Zaprojektujmy Twój <em>tort?</em></h2>
+    <p class="reach-p r" data-i18n="reach_p">Napisz do nas na Instagramie — to najszybszy sposób kontaktu. Zamówienia przyjmujemy z wyprzedzeniem, na torty weselne — minimum 2–3 tygodnie wcześniej.</p>
+    <div class="hour-row r"><span data-i18n="hour1_l">Przyjmowanie zamówień</span><span data-i18n="hour1_v">na bieżąco, przez Instagram</span></div>
+    <div class="hour-row r"><span data-i18n="hour2_l">Odbiór osobisty</span><span data-i18n="hour2_v">do ustalenia</span></div>
+    <div class="hour-row r"><span data-i18n="hour3_l">Miasto</span><span data-i18n="hour3_v">Białystok</span></div>
+  </div>
+  <div class="reach-card r">
+    <h3 data-i18n="reach_card_h3">Wypełnij formularz</h3>
+    <p data-i18n="reach_card_p">Odezwiemy się na Instagramie z pytaniami o smak i termin.</p>
+    <div class="form-row">
+      <div class="form-group"><label data-i18n="form_label_name">Imię</label><input type="text" id="f-name" data-i18n-ph="form_ph_name" placeholder="Twoje imię"></div>
+      <div class="form-group"><label data-i18n="form_label_phone">Kontakt (IG / telefon)</label><input type="text" id="f-phone" data-i18n-ph="form_ph_phone" placeholder="@twój_instagram albo +48 ..."></div>
+    </div>
+    <div class="form-group" style="margin-bottom:17px">
+      <label data-i18n="form_label_occasion">Okazja</label>
+      <select id="f-occasion">
+        <option value="" data-i18n="form_opt_choose">Wybierz okazję...</option>
+        <option data-i18n="form_opt_1">Urodziny</option>
+        <option data-i18n="form_opt_2">Wesele</option>
+        <option data-i18n="form_opt_3">Chrzest / roczek</option>
+        <option data-i18n="form_opt_4">Rocznica</option>
+        <option data-i18n="form_opt_5">Inne</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label data-i18n="form_label_date">Data</label><input type="date" id="f-date"></div>
+      <div class="form-group"><label data-i18n="form_label_servings">Porcje</label><input type="number" id="f-servings" data-i18n-ph="form_ph_servings" placeholder="np. 12"></div>
+    </div>
+    <div class="form-group"><label data-i18n="form_label_message">Wiadomość</label><textarea id="f-msg" rows="3" data-i18n-ph="form_ph_message" placeholder="Opisz swój wymarzony tort..."></textarea></div>
+    <button class="form-submit" onclick="sendForm()" data-i18n="form_submit">Wyślij na Instagram</button>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">TOP<img src="data:image/png;base64,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" alt="" class="f-logo-icon"><em>dessert</em></div>
+  <nav class="f-nav">
+    <a href="#about" data-i18n="nav_about">O nas</a>
+    <a href="#menu" data-i18n="nav_menu">Menu</a>
+    <a href="#gallery" data-i18n="nav_gallery">Galeria</a>
+    <a href="#reach" data-i18n="nav_reach">Kontakt</a>
+    <a href="https://www.instagram.com/top.dessert_bialystok/" target="_blank">Instagram</a>
+  </nav>
+  <div class="f-copy" data-i18n="footer_copy">© 2026 TOP dessert · Białystok</div>
+</footer>
+
+<a href="https://www.instagram.com/top.dessert_bialystok/" target="_blank" class="sticky-ig" aria-label="Instagram" id="sticky-ig" data-tip="Napisz do nas">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 1.25.06 2.1.26 2.85.55.77.3 1.42.7 2.07 1.35.65.65 1.05 1.3 1.35 2.07.29.75.49 1.6.55 2.85.06 1.25.07 1.65.07 4.85s0 3.6-.07 4.85c-.06 1.25-.26 2.1-.55 2.85-.3.77-.7 1.42-1.35 2.07-.65.65-1.3 1.05-2.07 1.35-.75.29-1.6.49-2.85.55-1.25.06-1.65.07-4.85.07s-3.6 0-4.85-.07c-1.25-.06-2.1-.26-2.85-.55-.77-.3-1.42-.7-2.07-1.35-.65-.65-1.05-1.3-1.35-2.07-.29-.75-.49-1.6-.55-2.85C2.2 15.6 2.2 15.2 2.2 12s0-3.6.07-4.85c.06-1.25.26-2.1.55-2.85.3-.77.7-1.42 1.35-2.07C4.82 1.58 5.47 1.18 6.24.88c.75-.29 1.6-.49 2.85-.55C10.4 2.2 10.8 2.2 12 2.2zm0 1.8c-3.15 0-3.52 0-4.76.07-1.02.05-1.57.22-1.94.36-.49.19-.83.42-1.2.79-.37.37-.6.71-.79 1.2-.14.37-.31.92-.36 1.94-.06 1.24-.07 1.61-.07 4.76s0 3.52.07 4.76c.05 1.02.22 1.57.36 1.94.19.49.42.83.79 1.2.37.37.71.6 1.2.79.37.14.92.31 1.94.36 1.24.06 1.61.07 4.76.07s3.52 0 4.76-.07c1.02-.05 1.57-.22 1.94-.36.49-.19.83-.42 1.2-.79.37-.37.6-.71.79-1.2.14-.37.31-.92.36-1.94.06-1.24.07-1.61.07-4.76s0-3.52-.07-4.76c-.05-1.02-.22-1.57-.36-1.94-.19-.49-.42-.83-.79-1.2-.37-.37-.71-.6-1.2-.79-.37-.14-.92-.31-1.94-.36C15.52 4 15.15 4 12 4zm0 3.05A4.95 4.95 0 1 1 12 17a4.95 4.95 0 0 1 0-9.95zm0 1.8a3.15 3.15 0 1 0 0 6.3 3.15 3.15 0 0 0 0-6.3zm5.15-1.98a1.16 1.16 0 1 1-2.31 0 1.16 1.16 0 0 1 2.31 0z" fill="white"/></svg>
+</a>
+
+<div id="toast"></div>
+
+<script>
+/* ===================== I18N ===================== */
+const I18N = {
+  pl:{
+    nav_about:'O nas', nav_menu:'Menu', nav_builder:'Zaprojektuj tort', nav_gallery:'Galeria', nav_reach:'Kontakt',
+    nav_cta:'Napisz', nav_cta_burger:'Napisz na Instagramie',
+    hero_eyebrow:'Torty na zamówienie · Białystok',
+    hero_h:'Twój tort.<br>Twój kolor.<br><em>Twoja historia.</em>',
+    hero_sub:'Każdy tort robię sama — od pierwszego kremu po ostatni detal. Wybierz styl, smak i dekorację, a razem stworzymy tort, którego nie zapomnisz.',
+    hero_btn_primary:'Zaprojektuj swój tort', hero_btn_outline:'Zobacz portfolio',
+    about_eyebrow:'O mnie', about_h:'Cześć, tu <em>TOP dessert.</em>',
+    about_p1:'Tworzę torty na zamówienie w Białymstoku — od klasycznych tortów lambeth ze wstążkami, przez rzeźbione dekoracje 3D, po delikatne kompozycje z kwiatami. Każdy element robię ręcznie.',
+    about_p2:'Pracuję nad jednym zamówieniem na raz, więc Twój tort dostanie tyle czasu i uwagi, ile potrzebuje. Portfolio rośnie z każdym miesiącem — zobaczysz je w galerii poniżej.',
+    about_fact1_t:'Ręcznie', about_fact1_l:'każdy detal robię sama',
+    about_fact2_t:'Indywidualnie', about_fact2_l:'jedno zamówienie na raz',
+    about_fact3_t:'Białystok', about_fact3_l:'odbiór i dostawa',
+    menu_eyebrow:'Co można zamówić', menu_h:'Słodka <em>mapa</em> TOP dessert.',
+    menu_note:'Każda kategoria to baza do indywidualnego zamówienia: zmieniamy rozmiar, smak i dekorację pod Twoją okazję.',
+    menu_tag_hit:'Hit',
+    menu_card1_name:'Lambeth i wstążki', menu_card1_desc:'Klasyczna, pikowana faktura kremu, satynowe wstążki i perły — wektorowa elegancja w pastelowych barwach.',
+    menu_card2_name:'Aksamitne 3D', menu_card2_desc:'Matowa, welurowa powłoka i rzeźbione elementy — serca, kule, bryły. Efekt, który trzeba zobaczyć na żywo.',
+    menu_card3_name:'Kwiatowe i delikatne', menu_card3_desc:'Świeże kwiaty, bibułka i akwarelowe przejścia kolorów — dla ślubów, chrzcin i wyjątkowych okazji.',
+    menu_card4_name:'Dla dzieci', menu_card4_desc:'Lepione ręcznie figurki z lukru plastycznego — ulubiona postać, zwierzątko albo bajka na torcie.',
+    menu_card5_name:'Mini torty i boxy', menu_card5_desc:'Małe formy z lustrzaną polewą lub kremem — pojedynczo albo w zestawie prezentowym.',
+    menu_card6_name:'Drip i owoce', menu_card6_desc:'Polewa spływająca po bokach, świeże jagody i owoce — klasyk, który zawsze robi wrażenie.',
+    builder_eyebrow:'Zaprojektuj online', builder_h:'Zaprojektuj <em>tort marzeń</em>',
+    builder_label_servings:'Ile porcji', builder_label_flavor:'Smak', builder_label_style:'Styl dekoracji',
+    sum_label_servings:'Porcji', sum_label_flavor:'Smak', sum_label_style:'Styl',
+    builder_cta:'Wyślij zapytanie na Instagram',
+    builder_note:'Dokładną cenę i termin ustalimy w wiadomości — zależą od rozmiaru, stylu i obłożenia kalendarza.',
+    gallery_eyebrow:'Portfolio', gallery_h:'Ostatnie <em>realizacje.</em>', gallery_link:'Więcej na Instagramie →',
+    filt_all:'Wszystkie', filt_lambeth:'Lambeth', filt_velvet:'Aksamitne', filt_kids:'Dla dzieci', filt_mini:'Mini torty', filt_drip:'Drip', filt_floral:'Kwiatowe',
+    steps_eyebrow:'Proces zamówienia', steps_h:'Jak <em>zamówić</em>',
+    step1_t:'Napisz', step1_s:'Na Instagramie — opisz okazję, termin i liczbę gości.',
+    step2_t:'Zaprojektujemy tort', step2_s:'Dobierzemy smak, styl i dekorację — możesz zacząć w konfiguratorze powyżej.',
+    step3_t:'Potwierdź zamówienie', step3_s:'Ustalimy cenę i termin, wpłacasz zadatek.',
+    step4_t:'Odbierz lub otrzymaj', step4_s:'Odbiór osobisty w Białymstoku lub dostawa — do ustalenia przy zamówieniu.',
+    reach_eyebrow:'Kontakt', reach_h:'Zaprojektujmy Twój <em>tort?</em>',
+    reach_p:'Napisz do nas na Instagramie — to najszybszy sposób kontaktu. Zamówienia przyjmujemy z wyprzedzeniem, na torty weselne — minimum 2–3 tygodnie wcześniej.',
+    hour1_l:'Przyjmowanie zamówień', hour1_v:'na bieżąco, przez Instagram',
+    hour2_l:'Odbiór osobisty', hour2_v:'do ustalenia',
+    hour3_l:'Miasto', hour3_v:'Białystok',
+    reach_card_h3:'Wypełnij formularz', reach_card_p:'Odezwiemy się na Instagramie z pytaniami o smak i termin.',
+    form_label_name:'Imię', form_ph_name:'Twoje imię',
+    form_label_phone:'Kontakt (IG / telefon)', form_ph_phone:'@twój_instagram albo +48 ...',
+    form_label_occasion:'Okazja', form_opt_choose:'Wybierz okazję...', form_opt_1:'Urodziny', form_opt_2:'Wesele', form_opt_3:'Chrzest / roczek', form_opt_4:'Rocznica', form_opt_5:'Inne',
+    form_label_date:'Data', form_label_servings:'Porcje', form_ph_servings:'np. 12',
+    form_label_message:'Wiadomość', form_ph_message:'Opisz swój wymarzony tort...',
+    form_submit:'Wyślij na Instagram',
+    footer_copy:'© 2026 TOP dessert · Białystok',
+    ig_tooltip:'Napisz do nas',
+    toast_msg:'Wiadomość skopiowana — wklej ją w Instagram Direct 💌'
+  },
+  ru:{
+    nav_about:'О нас', nav_menu:'Меню', nav_builder:'Собери торт', nav_gallery:'Галерея', nav_reach:'Контакты',
+    nav_cta:'Написать', nav_cta_burger:'Написать в Instagram',
+    hero_eyebrow:'Торты на заказ · Белосток',
+    hero_h:'Ваш торт.<br>Ваш цвет.<br><em>Ваша история.</em>',
+    hero_sub:'Каждый торт делаю сама — от первого крема до последней детали. Выберите стиль, вкус и декор — вместе создадим торт, который не забудется.',
+    hero_btn_primary:'Собери свой торт', hero_btn_outline:'Смотреть портфолио',
+    about_eyebrow:'Обо мне', about_h:'Привет, это <em>TOP dessert.</em>',
+    about_p1:'Делаю торты на заказ в Белостоке — от классических тортов ламбет с лентами, через рельефный 3D-декор, до нежных цветочных композиций. Каждую деталь делаю руками.',
+    about_p2:'Работаю над одним заказом за раз, поэтому ваш торт получит столько времени и внимания, сколько нужно. Портфолио растёт каждый месяц — смотрите его в галерее ниже.',
+    about_fact1_t:'Вручную', about_fact1_l:'каждая деталь — моя работа',
+    about_fact2_t:'Индивидуально', about_fact2_l:'один заказ за раз',
+    about_fact3_t:'Белосток', about_fact3_l:'самовывоз и доставка',
+    menu_eyebrow:'Что можно заказать', menu_h:'Сладкая <em>карта</em> TOP dessert.',
+    menu_note:'Каждая категория — база для персонального заказа: меняем размер, вкус и оформление под ваш повод.',
+    menu_tag_hit:'Хит',
+    menu_card1_name:'Ламбет и ленты', menu_card1_desc:'Классическая рельефная фактура крема, атласные ленты и жемчуг — винтажная элегантность в пастельных тонах.',
+    menu_card2_name:'Бархатные 3D', menu_card2_desc:'Матовое бархатное покрытие и рельефные элементы — сердца, шары, объёмные формы. Эффект, который нужно увидеть вживую.',
+    menu_card3_name:'Цветочные и нежные', menu_card3_desc:'Свежие цветы, вафельная бумага и акварельные переходы цвета — для свадеб, крестин и особых случаев.',
+    menu_card4_name:'Детские', menu_card4_desc:'Слепленные вручную фигурки из мастики — любимый персонаж, зверёк или мультфильм на торте.',
+    menu_card5_name:'Мини-торты и боксы', menu_card5_desc:'Маленькие формы с зеркальной глазурью или кремом — поштучно или в подарочном наборе.',
+    menu_card6_name:'Дрип и ягоды', menu_card6_desc:'Глазурь, стекающая по бокам, свежие ягоды и фрукты — классика, которая всегда впечатляет.',
+    builder_eyebrow:'Собери онлайн', builder_h:'Собери <em>торт мечты</em>',
+    builder_label_servings:'Сколько порций', builder_label_flavor:'Вкус', builder_label_style:'Стиль оформления',
+    sum_label_servings:'Порций', sum_label_flavor:'Вкус', sum_label_style:'Стиль',
+    builder_cta:'Отправить запрос в Instagram',
+    builder_note:'Точную цену и дату согласуем в переписке — зависят от размера, стиля и загруженности календаря.',
+    gallery_eyebrow:'Портфолио', gallery_h:'Последние <em>работы.</em>', gallery_link:'Больше в Instagram →',
+    filt_all:'Все', filt_lambeth:'Ламбет', filt_velvet:'Бархатные', filt_kids:'Детские', filt_mini:'Мини-торты', filt_drip:'Дрип', filt_floral:'Цветочные',
+    steps_eyebrow:'Процесс заказа', steps_h:'Как <em>заказать</em>',
+    step1_t:'Напишите', step1_s:'В Instagram — опишите повод, дату и количество гостей.',
+    step2_t:'Соберём торт', step2_s:'Подберём вкус, стиль и декор — можно начать в конфигураторе выше.',
+    step3_t:'Подтвердите заказ', step3_s:'Согласуем цену и дату, вносите предоплату.',
+    step4_t:'Заберите или получите', step4_s:'Самовывоз в Белостоке или доставка — обсудим при заказе.',
+    reach_eyebrow:'Контакты', reach_h:'Спроектируем ваш <em>торт?</em>',
+    reach_p:'Напишите нам в Instagram — это самый быстрый способ связи. Заказы принимаем заранее, на свадебные торты — минимум за 2–3 недели.',
+    hour1_l:'Приём заказов', hour1_v:'через Instagram, ежедневно',
+    hour2_l:'Самовывоз', hour2_v:'по договорённости',
+    hour3_l:'Город', hour3_v:'Белосток',
+    reach_card_h3:'Заполните форму', reach_card_p:'Ответим в Instagram с вопросами о вкусе и дате.',
+    form_label_name:'Имя', form_ph_name:'Ваше имя',
+    form_label_phone:'Контакт (IG / телефон)', form_ph_phone:'@ваш_инстаграм или +48 ...',
+    form_label_occasion:'Повод', form_opt_choose:'Выберите повод...', form_opt_1:'День рождения', form_opt_2:'Свадьба', form_opt_3:'Крестины / годик', form_opt_4:'Годовщина', form_opt_5:'Другое',
+    form_label_date:'Дата', form_label_servings:'Порций', form_ph_servings:'напр. 12',
+    form_label_message:'Сообщение', form_ph_message:'Опишите ваш торт мечты...',
+    form_submit:'Отправить в Instagram',
+    footer_copy:'© 2026 TOP dessert · Белосток',
+    ig_tooltip:'Написать нам',
+    toast_msg:'Сообщение скопировано — вставьте его в Instagram Direct 💌'
+  }
+};
+
+let lang = localStorage.getItem('topdessert_lang') || 'pl';
+
+function applyI18n(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n;
+    if(I18N[lang][key]!==undefined) el.innerHTML = I18N[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    const key = el.dataset.i18nPh;
+    if(I18N[lang][key]!==undefined) el.placeholder = I18N[lang][key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active', b.dataset.setlang===lang));
+  document.getElementById('sticky-ig').setAttribute('data-tip', I18N[lang].ig_tooltip);
+  renderMarquee();
+  renderSwatches();
+  renderStyleOptions();
+  renderGalleryFilters();
+  renderGallery();
+  renderSummary();
+}
+function setLang(l){
+  lang = l;
+  localStorage.setItem('topdessert_lang', l);
+  applyI18n();
+}
+
+/* ===================== MARQUEE ===================== */
+const marqueeKeys = ['menu_card1_name','menu_card2_name','menu_card3_name','menu_card4_name','menu_card5_name','menu_card6_name'];
+function renderMarquee(){
+  const items = marqueeKeys.map(k=>`<span class="marquee-item">${I18N[lang][k]}</span><span class="marquee-item marquee-dot">✦</span>`).join('');
+  document.getElementById('marquee-track').innerHTML = items + items;
+}
+
+/* ===================== BUILDER (real-photo style picker) ===================== */
+const flavors = [
+  {pl:'Waniliowo-truskawkowy', ru:'Ваниль и клубника'},
+  {pl:'Czekoladowo-orzechowy', ru:'Шоколад и орех'},
+  {pl:'Red velvet', ru:'Красный бархат'},
+  {pl:'Cytrynowo-malinowy', ru:'Лимон и малина'},
+  {pl:'Karmelowy', ru:'Карамельный'},
+  {pl:'Pistacjowy', ru:'Фисташковый'}
+];
+const cakeStyles = [
+  {key:'lambeth', pl:'Lambeth', ru:'Ламбет', img:'assets/menu-lambeth.png'},
+  {key:'velvet', pl:'Aksamitne 3D', ru:'Бархатные 3D', img:'assets/menu-velvet.png'},
+  {key:'floral', pl:'Kwiatowe', ru:'Цветочные', img:'assets/menu-floral.png'},
+  {key:'kids', pl:'Dla dzieci', ru:'Детские', img:'assets/menu-kids.png'},
+  {key:'mini', pl:'Mini torty', ru:'Мини-торты', img:'assets/menu-mini.png'},
+  {key:'drip', pl:'Drip i owoce', ru:'Дрип и ягоды', img:'assets/menu-drip.png'}
+];
+let servings = 10, flavorIdx = 0, styleIdx = 0;
+
+function renderSwatches(){
+  const wrap = document.getElementById('flavor-swatches');
+  wrap.innerHTML = flavors.map((f,i)=>`<button class="swatch${i===flavorIdx?' active':''}" data-idx="${i}">${f[lang]}</button>`).join('');
+  wrap.querySelectorAll('.swatch').forEach(btn=>btn.addEventListener('click', ()=>{
+    flavorIdx = +btn.dataset.idx;
+    wrap.querySelectorAll('.swatch').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderSummary();
+  }));
+}
+function renderStyleOptions(){
+  const wrap = document.getElementById('style-options');
+  wrap.innerHTML = cakeStyles.map((s,i)=>`<div class="style-opt${i===styleIdx?' active':''}" data-idx="${i}"><div class="photo"><img src="${s.img}" alt=""></div><div class="style-opt-label">${s[lang]}</div></div>`).join('');
+  wrap.querySelectorAll('.style-opt').forEach(opt=>opt.addEventListener('click', ()=>{
+    styleIdx = +opt.dataset.idx;
+    wrap.querySelectorAll('.style-opt').forEach(o=>o.classList.remove('active'));
+    opt.classList.add('active');
+    renderSummary();
+    updatePreview();
+  }));
+}
+function updatePreview(){
+  const img = document.getElementById('preview-img');
+  img.style.opacity = 0;
+  setTimeout(()=>{ img.src = cakeStyles[styleIdx].img; img.style.opacity = 1; }, 180);
+}
+function renderSummary(){
+  document.getElementById('sum-servings').textContent = servings;
+  document.getElementById('sum-flavor').textContent = flavors[flavorIdx][lang];
+  document.getElementById('sum-style').textContent = cakeStyles[styleIdx][lang];
+}
+function changeServings(delta){
+  servings = Math.max(6, Math.min(40, servings+delta));
+  document.getElementById('servings-val').textContent = servings;
+  renderSummary();
+}
+function buildOrderText(){
+  return lang==='pl'
+    ? `Dzień dobry! Chciał(a)bym zamówić tort: ${flavors[flavorIdx].pl}, styl "${cakeStyles[styleIdx].pl}", na ${servings} porcji. Proszę o wycenę i dostępne terminy.`
+    : `Здравствуйте! Хочу заказать торт: ${flavors[flavorIdx].ru}, стиль «${cakeStyles[styleIdx].ru}», на ${servings} порций. Подскажите, пожалуйста, цену и возможные даты.`;
+}
+function showToast(){
+  const t = document.getElementById('toast');
+  t.textContent = I18N[lang].toast_msg;
+  t.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(()=>t.classList.remove('show'), 4200);
+}
+function copyAndOpenInstagram(text){
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).catch(()=>{});
+  }
+  showToast();
+  window.open('https://www.instagram.com/top.dessert_bialystok/', '_blank');
+}
+function sendBuilder(){
+  copyAndOpenInstagram(buildOrderText());
+}
+
+/* ===================== GALLERY (real photos) ===================== */
+const galleryItems = [
+  {cat:'floral', img:'assets/gal-2.png', pl:'Frędzlowy tort ślubny', ru:'Бахромчатый свадебный торт', big:true},
+  {cat:'lambeth', img:'assets/gal-1.png', pl:'Tort lambeth z koroną', ru:'Торт ламбет с короной'},
+  {cat:'velvet', img:'assets/gal-3.png', pl:'Aksamitne serca — czerń i złoto', ru:'Бархатные сердца — чёрный с золотом'},
+  {cat:'velvet', img:'assets/gal-4.png', pl:'Aksamitne serce i bombka', ru:'Бархатное сердце и бомба'},
+  {cat:'kids', img:'assets/gal-5.png', pl:'Tort Roblox', ru:'Торт Roblox'},
+  {cat:'kids', img:'assets/gal-6.png', pl:'Tort kosmiczny', ru:'Космический торт'},
+  {cat:'velvet', img:'assets/gal-7.png', pl:'Elegancki tort na urodziny', ru:'Элегантный торт на день рождения'},
+  {cat:'mini', img:'assets/gal-8.png', pl:'Mini ciasta z jagodami', ru:'Мини-десерты с ягодами'},
+  {cat:'drip', img:'assets/gal-9.png', pl:'Truskawki w czekoladzie', ru:'Клубника в шоколаде'},
+  {cat:'drip', img:'assets/gal-10.png', pl:'Tort drip z cukierkami', ru:'Дрип-торт с конфетами'},
+  {cat:'mini', img:'assets/gal-11.png', pl:'Wieża deserowa na wesele', ru:'Десертная башня на свадьбу'},
+  {cat:'mini', img:'assets/gal-12.png', pl:'Wielkanocne jajka aksamitne', ru:'Пасхальные бархатные яйца'}
+];
+const filterOrder = ['all','lambeth','velvet','floral','kids','mini','drip'];
+const filterKey = {all:'filt_all',lambeth:'filt_lambeth',velvet:'filt_velvet',floral:'filt_floral',kids:'filt_kids',mini:'filt_mini',drip:'filt_drip'};
+let activeFilter = 'all';
+function renderGalleryFilters(){
+  const wrap = document.getElementById('gal-filters');
+  wrap.innerHTML = filterOrder.map(f=>`<button class="gal-filter${f===activeFilter?' active':''}" data-cat="${f}">${I18N[lang][filterKey[f]]}</button>`).join('');
+  wrap.querySelectorAll('.gal-filter').forEach(btn=>btn.addEventListener('click', ()=>{
+    activeFilter = btn.dataset.cat;
+    wrap.querySelectorAll('.gal-filter').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    applyGalleryFilter();
+  }));
+}
+function renderGallery(){
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = galleryItems.map((it)=>`<div class="gi${it.big?' big':''}" data-cat="${it.cat}"><div class="photo"><img src="${it.img}" alt="${it[lang]}"><div class="gi-cap">${it[lang]}</div></div></div>`).join('');
+  applyGalleryFilter();
+}
+function applyGalleryFilter(){
+  document.querySelectorAll('#gallery-grid .gi').forEach(el=>{
+    el.classList.toggle('hide', activeFilter!=='all' && el.dataset.cat!==activeFilter);
+  });
+}
+
+/* ===================== MISC ===================== */
+function toggleBurger(){
+  const m=document.getElementById('burger-menu');
+  const i=document.getElementById('burger-icon');
+  if(!m) return;
+  const open = m.style.display==='flex';
+  m.style.display = open?'none':'flex';
+  i.innerHTML = open
+    ? '<path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+    : '<path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>';
+}
+function closeBurger(){
+  const m=document.getElementById('burger-menu');
+  if(m) m.style.display='none';
+}
+function sendForm(){
+  const name = document.getElementById('f-name').value || '—';
+  const contact = document.getElementById('f-phone').value || '—';
+  const occasion = document.getElementById('f-occasion').value || '—';
+  const date = document.getElementById('f-date').value || '—';
+  const serv = document.getElementById('f-servings').value || '—';
+  const msg = document.getElementById('f-msg').value || '—';
+  const text = lang==='pl'
+    ? `Dzień dobry! Nazywam się ${name} (${contact}).\nOkazja: ${occasion}\nData: ${date}\nPorcje: ${serv}\n${msg}`
+    : `Здравствуйте! Меня зовут ${name} (${contact}).\nПовод: ${occasion}\nДата: ${date}\nПорций: ${serv}\n${msg}`;
+  copyAndOpenInstagram(text);
+}
+
+// Scroll reveal
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.r').forEach(el=>observer.observe(el));
+
+applyI18n();
+</script>
+</body>
+</html>
